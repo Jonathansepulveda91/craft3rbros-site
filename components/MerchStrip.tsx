@@ -1,3 +1,5 @@
+'use client';
+
 export default function MerchStrip() {
   const storeUrl = 'https://craft3rbr0s-shop.fourthwall.com';
 

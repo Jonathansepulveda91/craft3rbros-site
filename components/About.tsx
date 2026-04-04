@@ -1,3 +1,5 @@
+'use client';
+
 import { type ChannelStats, formatCount } from '@/lib/youtube';
 
 interface AboutProps {

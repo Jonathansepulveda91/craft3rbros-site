@@ -1,6 +1,6 @@
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
-const CHANNEL_HANDLE = 'Craft3rBr0s';
+const CHANNEL_HANDLE = '@Craft3rBr0s';
 
 export interface YoutubeVideo {
   id: string;

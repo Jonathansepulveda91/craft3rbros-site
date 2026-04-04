@@ -1,3 +1,5 @@
+'use client';
+
 import { type MergedVideo } from '@/lib/types';
 import { formatCount } from '@/lib/youtube';
 
