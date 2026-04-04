@@ -1,0 +1,5 @@
+Set up Sanity.io — create your content schema (videos, pages, etc.)
+Build in Next.js — connect Sanity as the data source
+Set up Fourthwall — connect your merch under your domain
+Deploy to Vercel — link your GitHub repo, it handles the rest
+Ongoing: you manage everything from the Sanity Studio dashboard
