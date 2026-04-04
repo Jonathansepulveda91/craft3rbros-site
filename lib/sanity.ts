@@ -1,8 +1,14 @@
 import { createClient } from 'next-sanity';
 
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+
+const isConfigured =
+  Boolean(projectId) && projectId !== 'your-project-id-here';
+
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: isConfigured ? projectId! : 'placeholder',
+  dataset,
   apiVersion: '2024-01-01',
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,
@@ -17,10 +23,8 @@ export interface SanityVideo {
 }
 
 export async function getFeaturedVideos(): Promise<SanityVideo[]> {
-  if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your-project-id-here') {
-    return [];
-  }
-  
+  if (!isConfigured) return [];
+
   try {
     const query = `*[_type == "featuredVideo"] | order(featured desc, coalesce(order, 999) asc, _createdAt desc)`;
     const videos = await client.fetch<SanityVideo[]>(query, {}, { next: { revalidate: 60 } });
