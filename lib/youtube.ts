@@ -84,6 +84,28 @@ export async function getChannelStats(): Promise<ChannelStats | null> {
   }
 }
 
+const CHANNEL_ID = 'UC5h6vKjymrYGmGIOqhGkoCA'; // Your real channel ID from the earlier debug check
+
+export async function getMostPopularVideos(limit: number = 6): Promise<YoutubeVideo[]> {
+  if (!API_KEY) return [];
+
+  // 1. Search for most popular videos in the channel
+  const url = `${BASE_URL}/search?part=snippet&channelId=${CHANNEL_ID}&maxResults=${limit}&order=viewCount&type=video&key=${API_KEY}`;
+
+  try {
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (!data.items?.length) return [];
+
+    const videoIds = data.items.map((item: any) => item.id.videoId);
+    return getVideoDetails(videoIds);
+  } catch (error) {
+    console.error('Error fetching popular videos:', error);
+    return [];
+  }
+}
+
 export function formatCount(count: string): string {
   const num = parseInt(count, 10);
   if (isNaN(num)) return '0';
@@ -101,3 +123,4 @@ function parseDuration(duration: string): string {
   if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   return `${m}:${String(s).padStart(2, '0')}`;
 }
+
