@@ -99,50 +99,95 @@ export default function MerchStrip() {
 
           {/* Right: Store card */}
           <div style={{
-            background: '#111122', borderRadius: '20px',
+            background: '#111122', borderRadius: '24px',
             border: '1px solid rgba(255,107,26,0.15)',
-            padding: '40px 32px', textAlign: 'center',
-            boxShadow: '0 0 60px rgba(255,107,26,0.06)',
+            position: 'relative',
+            overflow: 'hidden',
+            boxShadow: '0 32px 64px rgba(0,0,0,0.4)',
+            transition: 'all 0.3s ease',
           }}>
+            {/* Shop Background Image */}
             <div style={{
-              width: '80px', height: '80px', borderRadius: '20px',
-              background: 'linear-gradient(135deg, rgba(255,107,26,0.2), rgba(255,107,26,0.05))',
-              border: '1px solid rgba(255,107,26,0.2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 20px',
-            }}>
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
+              position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+              backgroundImage: `linear-gradient(to bottom, rgba(8,8,16,0.2) 0%, rgba(8,8,16,0.9) 80%), url('https://imgproxy.fourthwall.com/R9J7me9Vkge4fLClLJshItJ1KNjlvv-g40Gw6satu-8/w:1920/sm:1/enc/W75q-onZw4zDC8Tl/ubRWgXbH5wivfeZM/S9eIUxffz_5WiiA-/DD4Ivf54YVhEL2hB/h1f_6kkKoNZqcXta/JPrU1CK--adkIwTB/jh2dnzCGSQbTtaTb/3qGn-eijhBmuJqXf/02yRP_WdA9sKfkYG/QCBRwsNqj3Np2Dim/3_LK1BUNh8fYlHgF/rIlUguokxhF8M6pt/XqabRPOP_KR5WUDh/Q2AWNnFmUFdJ6hf_/cAyHKfe0PlWQXIql/gMuMJ8kf4UfqUUN2')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.6,
+              zIndex: 0,
+            }} />
+
+            <div style={{ position: 'relative', zIndex: 1, padding: '60px 32px' }}>
+              <div style={{
+                width: '64px', height: '64px', borderRadius: '16px',
+                background: 'rgba(255,107,26,1)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 24px',
+                boxShadow: '0 8px 16px rgba(255,107,26,0.5)',
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                  <path d="M3 6h18" />
+                  <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+              </div>
+              
+              <h3 style={{ color: '#fff', fontSize: '26px', fontWeight: 900, marginBottom: '10px', letterSpacing: '-0.5px' }}>Craft3rBr0s Shop</h3>
+              <p style={{ color: '#ffffffcc', fontSize: '15px', marginBottom: '28px', lineHeight: 1.6, fontWeight: 500 }}>
+                Hoodies, tees, accessories<br />
+                <span style={{ color: '#FF6B1A' }}>and exclusive gaming gear</span>
+              </p>
+              
+              <div style={{ 
+                display: 'flex', gap: '16px', justifyContent: 'center', 
+                fontSize: '13px', color: '#fff', fontWeight: 600, 
+                marginBottom: '32px' 
+              }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A" strokeWidth="3" strokeLinecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  Free shipping options
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A" strokeWidth="3" strokeLinecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  Premium quality
+                </span>
+              </div>
+              
+              <a
+                href={storeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block', 
+                  background: 'rgba(255,255,255,1)',
+                  color: '#080810', 
+                  padding: '14px 30px',
+                  borderRadius: '12px', 
+                  fontSize: '14px',
+                  fontWeight: 800, 
+                  textDecoration: 'none',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                }}
+                onMouseEnter={(e) => { 
+                  (e.currentTarget as HTMLElement).style.background = '#FF6B1A'; 
+                  (e.currentTarget as HTMLElement).style.color = '#fff';
+                  (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => { 
+                  (e.currentTarget as HTMLElement).style.background = '#fff'; 
+                  (e.currentTarget as HTMLElement).style.color = '#080810';
+                  (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
+                }}
+              >
+                craft3rbr0s-shop.fourthwall.com ↗
+              </a>
             </div>
-            <h3 style={{ color: '#fff', fontSize: '22px', fontWeight: 800, marginBottom: '8px' }}>Craft3rBr0s Shop</h3>
-            <p style={{ color: '#8888aa', fontSize: '14px', marginBottom: '24px', lineHeight: 1.6 }}>
-              Hoodies, tees, accessories<br />and exclusive gaming gear
-            </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', fontSize: '13px', color: '#555570', marginBottom: '24px' }}>
-              <span>✓ Free shipping options</span>
-              <span>✓ Premium quality</span>
-            </div>
-            <a
-              href={storeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'block', background: 'rgba(255,107,26,0.1)',
-                border: '1px solid rgba(255,107,26,0.3)',
-                color: '#FF6B1A', padding: '12px',
-                borderRadius: '10px', fontSize: '14px',
-                fontWeight: 700, textDecoration: 'none',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,107,26,0.2)'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,107,26,0.1)'; }}
-            >
-              craft3rbr0s-shop.fourthwall.com ↗
-            </a>
           </div>
+
         </div>
       </div>
 

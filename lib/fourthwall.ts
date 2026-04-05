@@ -48,20 +48,12 @@ export async function getFourthwallProducts(): Promise<FourthwallProduct[]> {
     if (!data.products) return MOCK_PRODUCTS;
 
     return data.products.slice(0, 4).map((p: any) => {
-      const variant = p.variants?.[0];
-      const rawPrice = variant?.price;
-      
-      // Handle Fourthwall's dual price format (some return string, some return object)
-      const priceStr = typeof rawPrice === 'object' && rawPrice !== null
-        ? String(rawPrice.amount || '0.00')
-        : String(rawPrice || '0.00');
-
       return {
         id: p.id,
         title: p.title,
-        price: priceStr,
-        image: p.images?.[0]?.src || '',
-        url: `${SHOP_URL}/products/${p.handle}`
+        price: String(p.price || '0.00'),
+        image: p.image || '',
+        url: `${SHOP_URL}${p.url}`
       };
     });
   } catch (err) {
