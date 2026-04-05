@@ -18,10 +18,10 @@ export default async function Home() {
   const [sanityResult, statsResult, popularResult, merchResult, pageResult, streamsResult] = await Promise.allSettled([
     getFeaturedVideos(),
     getChannelStats(),
-    getPopularContent(12),
+    getPopularContent(50), // Fetch large pool to filter/sort
     getFourthwallProducts(),
     getPageContent(),
-    getLiveStreams(6),
+    getLiveStreams(50),   // Fetch large pool to filter/sort
   ]);
 
   const sanityVideos: SanityVideo[] = sanityResult.status === 'fulfilled' ? sanityResult.value : [];
@@ -51,18 +51,25 @@ export default async function Home() {
     order: 999,
   });
 
+  // 1. Process Long-form Videos (Sort by popularity)
   const allLongVideos = [...mergedFromSanity.filter(v => !v.isShort), ...popularData.videos.map(mapToMerged)]
-    .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+    .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
+    .sort((a, b) => parseInt(b.viewCount) - parseInt(a.viewCount));
 
+  // 2. Process Shorts (Sort by popularity)
   const allShorts = [...mergedFromSanity.filter(v => v.isShort), ...popularData.shorts.map(mapToMerged)]
-    .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+    .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
+    .sort((a, b) => parseInt(b.viewCount) - parseInt(a.viewCount));
 
-  const allStreams = rawStreams.map(mapToMerged);
+  // 3. Process Streams (Sort by popularity)
+  const allStreams = rawStreams.map(mapToMerged)
+    .sort((a, b) => parseInt(b.viewCount) - parseInt(a.viewCount));
 
-  const featuredVideo = allLongVideos.find((v) => v.featured) ?? allLongVideos[0] ?? null;
-  const gridVideos = allLongVideos.filter((v) => v.id !== featuredVideo?.id).slice(0, 6);
-  const gridShorts = allShorts.slice(0, 6);
-  const gridStreams = allStreams.slice(0, 6);
+  // 4. Selections
+  const featuredVideo = mergedFromSanity.find((v) => v.featured) ?? allLongVideos[0] ?? null;
+  const gridVideos = allLongVideos.filter((v) => v.id !== featuredVideo?.id).slice(0, 8);
+  const gridShorts = allShorts.slice(0, 8);
+  const gridStreams = allStreams.slice(0, 8);
 
   return (
     <main style={{ background: '#080810', minHeight: '100vh', overflowX: 'hidden' }}>

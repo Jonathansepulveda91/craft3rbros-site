@@ -58,7 +58,7 @@ export async function getVideoDetails(ids: string[]): Promise<YoutubeVideo[]> {
 
 export async function getPopularContent(limit = 12): Promise<{ videos: YoutubeVideo[], shorts: YoutubeVideo[] }> {
   if (!API_KEY) return { videos: [], shorts: [] };
-  const url = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=24&order=viewCount&type=video&key=${API_KEY}`;
+  const url = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=50&order=viewCount&type=video&key=${API_KEY}`;
 
   try {
     const res = await fetch(url, { next: { revalidate: 3600 } });
@@ -75,9 +75,9 @@ export async function getPopularContent(limit = 12): Promise<{ videos: YoutubeVi
   }
 }
 
-export async function getLiveStreams(limit = 6): Promise<YoutubeVideo[]> {
+export async function getLiveStreams(limit = 8): Promise<YoutubeVideo[]> {
   if (!API_KEY) return [];
-  const url = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=${limit}&order=date&type=video&eventType=completed&key=${API_KEY}`;
+  const url = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=50&order=viewCount&type=video&eventType=completed&key=${API_KEY}`;
   try {
     const res = await fetch(url, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
@@ -87,6 +87,7 @@ export async function getLiveStreams(limit = 6): Promise<YoutubeVideo[]> {
     return details.map(v => ({ ...v, category: 'Stream' }));
   } catch (error) { return []; }
 }
+
 
 export async function getChannelStats(): Promise<ChannelStats | null> {
   if (!API_KEY) return null;
