@@ -18,7 +18,7 @@ export default function Hero({ video }: HeroProps) {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        paddingTop: '70px',
+        paddingTop: '80px',
         background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,107,255,0.15) 0%, transparent 70%), #080810',
         position: 'relative',
         overflow: 'hidden',
@@ -28,30 +28,31 @@ export default function Hero({ video }: HeroProps) {
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
+        backgroundSize: '40px 40px',
       }} />
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '60px 24px', width: '100%', position: 'relative' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 20px', width: '100%', position: 'relative' }}>
         {/* Headline */}
-        <div className="animate-fade-in-up" style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <div className="animate-fade-in-up" style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
             background: 'rgba(26,107,255,0.12)', border: '1px solid rgba(26,107,255,0.25)',
-            borderRadius: '100px', padding: '6px 16px', marginBottom: '24px',
-            fontSize: '13px', fontWeight: 600, color: '#1A6BFF', letterSpacing: '0.05em',
+            borderRadius: '100px', padding: '6px 14px', marginBottom: '20px',
+            fontSize: '12px', fontWeight: 700, color: '#1A6BFF', letterSpacing: '0.05em',
           }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#1A6BFF', display: 'inline-block', animation: 'pulse-glow 2s infinite' }} />
-            LIVE ON YOUTUBE
+            LIVE CONTENT
           </div>
 
-          <h1 style={{ fontSize: 'clamp(52px, 8vw, 96px)', fontWeight: 900, lineHeight: 1.0, letterSpacing: '-3px', marginBottom: '20px' }}>
+          <h1 style={{ fontSize: 'clamp(44px, 12vw, 96px)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-2px', marginBottom: '16px' }}>
             <span style={{ color: '#1A6BFF' }}>Craft3r</span>
             <span style={{ color: '#FF6B1A' }}>Br0s</span>
           </h1>
-          <p style={{ fontSize: 'clamp(16px, 2.5vw, 20px)', color: '#8888aa', maxWidth: '520px', margin: '0 auto', lineHeight: 1.6, fontWeight: 400 }}>
-            Epic gaming content, epic adventures. New videos every week — subscribe and never miss a drop.
+          <p style={{ fontSize: 'clamp(15px, 2.5vw, 19px)', color: '#8888aa', maxWidth: '480px', margin: '0 auto', lineHeight: 1.5, fontWeight: 400 }}>
+            Epic gaming adventures & content. Subscribe and join the community.
           </p>
         </div>
+
 
         {/* Video embed or placeholder */}
         <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%' }}>

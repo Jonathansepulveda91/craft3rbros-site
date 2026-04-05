@@ -62,10 +62,10 @@ export default function VideosGrid({ videos }: VideosGridProps) {
             </p>
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '24px',
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', 
+            gap: '24px' 
           }}>
             {videos.map((video) => (
               <a

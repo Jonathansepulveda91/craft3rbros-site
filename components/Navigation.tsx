@@ -22,23 +22,23 @@ export default function Navigation() {
         right: 0,
         zIndex: 100,
         transition: 'background 0.3s ease, border-color 0.3s ease',
-        background: scrolled ? 'rgba(8,8,16,0.97)' : 'rgba(8,8,16,0.6)',
+        background: scrolled || mobileOpen ? 'rgba(8,8,16,0.98)' : 'rgba(8,8,16,0.6)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
-        borderBottom: `1px solid ${scrolled ? 'rgba(255,255,255,0.08)' : 'transparent'}`,
+        borderBottom: `1px solid ${scrolled || mobileOpen ? 'rgba(255,255,255,0.08)' : 'transparent'}`,
       }}
     >
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
 
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '1px' }}>
-            <span style={{ fontSize: '24px', fontWeight: 900, color: '#1A6BFF', letterSpacing: '-0.5px', lineHeight: 1 }}>Craft3r</span>
-            <span style={{ fontSize: '24px', fontWeight: 900, color: '#FF6B1A', letterSpacing: '-0.5px', lineHeight: 1 }}>Br0s</span>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '1px', flexShrink: 0 }}>
+            <span style={{ fontSize: '22px', fontWeight: 900, color: '#1A6BFF', letterSpacing: '-0.5px', lineHeight: 1 }}>Craft3r</span>
+            <span style={{ fontSize: '22px', fontWeight: 900, color: '#FF6B1A', letterSpacing: '-0.5px', lineHeight: 1 }}>Br0s</span>
           </Link>
 
           {/* Desktop links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }} className="hidden md:flex">
+          <div className="hidden lg:flex items-center gap-8">
             {(['#home', '#videos', '#shop', '#about'] as const).map((href, i) => {
               const label = ['Home', 'Videos', 'Shop', 'About'][i];
               return (
@@ -56,13 +56,13 @@ export default function Navigation() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {/* YouTube link */}
+            {/* YouTube link (desktop only) */}
             <a
               href="https://www.youtube.com/@Craft3rBr0s"
               target="_blank"
               rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2"
               style={{
-                display: 'flex', alignItems: 'center', gap: '6px',
                 color: '#8888aa', textDecoration: 'none', fontSize: '14px', fontWeight: 500,
                 padding: '8px 14px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)',
@@ -76,12 +76,11 @@ export default function Navigation() {
                 (e.currentTarget as HTMLElement).style.color = '#8888aa';
                 (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)';
               }}
-              className="hidden md:flex"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
               </svg>
-              Subscribe
+              <span>Subscribe</span>
             </a>
 
             {/* Shop CTA */}
@@ -92,66 +91,61 @@ export default function Navigation() {
               style={{
                 background: 'linear-gradient(135deg, #FF6B1A, #ff8c4a)',
                 color: '#fff',
-                padding: '9px 20px',
+                padding: '9px 18px',
                 borderRadius: '9px',
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: 700,
                 textDecoration: 'none',
                 transition: 'all 0.2s',
-                boxShadow: '0 4px 14px rgba(255,107,26,0.35)',
+                boxShadow: '0 4px 14px rgba(255,107,26,0.25)',
                 whiteSpace: 'nowrap',
               }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 20px rgba(255,107,26,0.5)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 14px rgba(255,107,26,0.35)';
-              }}
             >
-              Shop Now
+              Shop
             </a>
 
-            {/* Mobile hamburger */}
+            {/* Mobile hamburger - show only on smaller screens */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden"
-              style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', padding: '6px' }}
+              className="lg:hidden"
+              style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', padding: '8px', zIndex: 101, display: 'flex', alignItems: 'center' }}
               aria-label="Toggle menu"
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 {mobileOpen ? <><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></> : <><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>}
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Fullscreen Mobile Menu Overlay */}
         {mobileOpen && (
-          <div className="md:hidden" style={{ borderTop: '1px solid rgba(255,255,255,0.07)', padding: '12px 0 16px' }}>
-            {(['#home', '#videos', '#shop', '#about'] as const).map((href, i) => (
+          <div style={{ position: 'fixed', inset: 0, top: '70px', background: '#080810', zIndex: 99, padding: '24px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {(['#home', '#videos', '#shop', '#about'] as const).map((href, i) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  style={{ display: 'block', color: '#fff', textDecoration: 'none', padding: '16px 0', fontSize: '24px', fontWeight: 800, borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+                >
+                  {['Home', 'Videos', 'Shop', 'About'][i]}
+                </a>
+              ))}
               <a
-                key={href}
-                href={href}
+                href="https://www.youtube.com/@Craft3rBr0s"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'block', color: '#ff4444', textDecoration: 'none', padding: '24px 0', fontSize: '18px', fontWeight: 600 }}
                 onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', color: '#8888aa', textDecoration: 'none', padding: '12px 8px', fontSize: '16px', fontWeight: 500 }}
               >
-                {['Home', 'Videos', 'Shop', 'About'][i]}
+                YouTube Channel ↗
               </a>
-            ))}
-            <a
-              href="https://www.youtube.com/@Craft3rBr0s"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: 'block', color: '#ff4444', textDecoration: 'none', padding: '12px 8px', fontSize: '16px', fontWeight: 500 }}
-              onClick={() => setMobileOpen(false)}
-            >
-              YouTube ↗
-            </a>
+            </div>
           </div>
         )}
       </div>
     </nav>
   );
 }
+

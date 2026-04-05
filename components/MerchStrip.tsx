@@ -29,11 +29,11 @@ export default function MerchStrip() {
         pointerEvents: 'none',
       }} />
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', position: 'relative' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }} className="md:grid">
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 20px', position: 'relative' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
 
           {/* Left: Copy */}
-          <div>
+          <div style={{ flex: '1 1 420px' }}>
             <p style={{ color: '#FF6B1A', fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
               Official Store
             </p>
@@ -99,6 +99,7 @@ export default function MerchStrip() {
 
           {/* Right: Store card */}
           <div style={{
+            flex: '1 1 360px',
             background: '#111122', borderRadius: '24px',
             border: '1px solid rgba(255,107,26,0.15)',
             position: 'relative',

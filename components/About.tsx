@@ -30,10 +30,10 @@ export default function About({ channelStats }: AboutProps) {
       }}
     >
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="md:grid">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
 
           {/* Left: Bio */}
-          <div>
+          <div style={{ flex: '1 1 420px' }}>
             <p style={{ color: '#1A6BFF', fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
               About the Channel
             </p>
@@ -87,7 +87,7 @@ export default function About({ channelStats }: AboutProps) {
           </div>
 
           {/* Right: Stats */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ flex: '1 1 360px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {stats.map((stat) => (
               <div
                 key={stat.label}

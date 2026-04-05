@@ -11,14 +11,14 @@ export default function MerchGrid({ products }: MerchGridProps) {
 
   return (
     <section id="merch-feed" style={{ padding: '60px 0', background: '#080810' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 20px' }}>
         <h3 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', marginBottom: '32px', textAlign: 'center' }}>
           Trending <span style={{ color: '#FF6B1A' }}>Official Merch</span> 🛒
         </h3>
         
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', 
           gap: '24px',
           paddingBottom: '40px' 
         }}>
