@@ -47,13 +47,23 @@ export async function getFourthwallProducts(): Promise<FourthwallProduct[]> {
     const data = await res.json();
     if (!data.products) return MOCK_PRODUCTS;
 
-    return data.products.slice(0, 4).map((p: any) => ({
-      id: p.id,
-      title: p.title,
-      price: p.variants?.[0]?.price || '0.00',
-      image: p.images?.[0]?.src || '',
-      url: `${SHOP_URL}/products/${p.handle}`
-    }));
+    return data.products.slice(0, 4).map((p: any) => {
+      const variant = p.variants?.[0];
+      const rawPrice = variant?.price;
+      
+      // Handle Fourthwall's dual price format (some return string, some return object)
+      const priceStr = typeof rawPrice === 'object' && rawPrice !== null
+        ? String(rawPrice.amount || '0.00')
+        : String(rawPrice || '0.00');
+
+      return {
+        id: p.id,
+        title: p.title,
+        price: priceStr,
+        image: p.images?.[0]?.src || '',
+        url: `${SHOP_URL}/products/${p.handle}`
+      };
+    });
   } catch (err) {
     console.error('Error fetching Fourthwall products:', err);
     return MOCK_PRODUCTS;
