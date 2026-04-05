@@ -35,8 +35,12 @@ Your site is now **automated**:
 
 ---
 
-### ⚠️ Common Fixes
-- **Studio CORS error**: If the Studio won't load, ensure both `https://craft3rbr0s.com` AND `https://www.craft3rbr0s.com` are added in [Sanity Manage > API > CORS](https://sanity.io/manage/project/hy16110k/api).
-- **SSL error**: This usually resolves itself within 24 hours of setting up a new domain on Vercel.
+### 🎨 Social Media & SEO
+When you share your site link, it shows a **Premium Preview Image**.
+- **How to change it**: Replace the file `public/og-image.png` with a new image (recommended size: 1200x630 pixels).
+- **Update metadata**: If you want to change the text people see on social media, edit the `metadata` object in `/app/layout.tsx`.
+
+---
 
 Enjoy your new brand hub! 🎮🔥
+

@@ -1,3 +1,4 @@
-import { videoType } from './video';
+import video from './video'
+import pageContent from './pageContent'
 
-export const schemaTypes = [videoType];
+export const schemaTypes = [video, pageContent]

@@ -1,6 +1,6 @@
-const API_KEY = process.env.YOUTUBE_API_KEY;
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
-const CHANNEL_HANDLE = '@Craft3rBr0s';
+const API_KEY = process.env.YOUTUBE_API_KEY;
+const CHANNEL_ID = 'UC5h6vKjymrYGmGIOqhGkoCA';
 
 export interface YoutubeVideo {
   id: string;
@@ -13,114 +13,104 @@ export interface YoutubeVideo {
   duration: string;
   publishedAt: string;
   channelTitle: string;
+  isShort: boolean;
+  category?: string;
 }
 
 export interface ChannelStats {
   subscriberCount: string;
   viewCount: string;
   videoCount: string;
-  channelTitle: string;
 }
 
-export async function getVideoDetails(videoIds: string[]): Promise<YoutubeVideo[]> {
-  if (!API_KEY || videoIds.length === 0) return [];
-
-  const ids = videoIds.join(',');
-  const url = `${BASE_URL}/videos?part=snippet,statistics,contentDetails&id=${ids}&key=${API_KEY}`;
-
-  try {
-    const res = await fetch(url, { next: { revalidate: 60 } });
-    if (!res.ok) {
-      console.error(`YouTube API error: ${res.status} ${res.statusText}`);
-      return [];
-    }
-    const data = await res.json();
-    if (!data.items) return [];
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return data.items.map((item: any): YoutubeVideo => ({
-      id: item.id,
-      title: item.snippet.title,
-      description: item.snippet.description ?? '',
-      thumbnail:
-        item.snippet.thumbnails?.maxres?.url ??
-        item.snippet.thumbnails?.high?.url ??
-        item.snippet.thumbnails?.medium?.url ??
-        `https://img.youtube.com/vi/${item.id}/hqdefault.jpg`,
-      viewCount: item.statistics?.viewCount ?? '0',
-      likeCount: item.statistics?.likeCount ?? '0',
-      commentCount: item.statistics?.commentCount ?? '0',
-      duration: parseDuration(item.contentDetails?.duration ?? 'PT0S'),
-      publishedAt: item.snippet.publishedAt,
-      channelTitle: item.snippet.channelTitle,
-    }));
-  } catch (error) {
-    console.error('Error fetching YouTube video details:', error);
-    return [];
-  }
-}
-
-export async function getChannelStats(): Promise<ChannelStats | null> {
-  if (!API_KEY) return null;
-
-  const url = `${BASE_URL}/channels?part=statistics,snippet&forHandle=${CHANNEL_HANDLE}&key=${API_KEY}`;
-
-  try {
-    const res = await fetch(url, { next: { revalidate: 3600 } }); // cache 1 hr
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data.items?.length) return null;
-
-    const ch = data.items[0];
-    return {
-      subscriberCount: ch.statistics?.subscriberCount ?? '0',
-      viewCount: ch.statistics?.viewCount ?? '0',
-      videoCount: ch.statistics?.videoCount ?? '0',
-      channelTitle: ch.snippet?.title ?? 'Craft3rBr0s',
-    };
-  } catch (error) {
-    console.error('Error fetching YouTube channel stats:', error);
-    return null;
-  }
-}
-
-const CHANNEL_ID = 'UC5h6vKjymrYGmGIOqhGkoCA'; // Your real channel ID from the earlier debug check
-
-export async function getMostPopularVideos(limit: number = 6): Promise<YoutubeVideo[]> {
-  if (!API_KEY) return [];
-
-  // 1. Search for most popular videos in the channel
-  const url = `${BASE_URL}/search?part=snippet&channelId=${CHANNEL_ID}&maxResults=${limit}&order=viewCount&type=video&key=${API_KEY}`;
+export async function getVideoDetails(ids: string[]): Promise<YoutubeVideo[]> {
+  if (!API_KEY || ids.length === 0) return [];
+  const url = `${BASE_URL}/videos?part=snippet,statistics,contentDetails&id=${ids.join(',')}&key=${API_KEY}`;
 
   try {
     const res = await fetch(url, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
     const data = await res.json();
-    if (!data.items?.length) return [];
+    if (!data.items) return [];
 
-    const videoIds = data.items.map((item: any) => item.id.videoId);
-    return getVideoDetails(videoIds);
+    return data.items.map((item: any): YoutubeVideo => {
+      const durationRaw = item.contentDetails?.duration ?? 'PT0S';
+      const isShort = !durationRaw.includes('M') && !durationRaw.includes('H');
+      return {
+        id: item.id,
+        title: item.snippet.title,
+        description: item.snippet.description ?? '',
+        thumbnail: item.snippet.thumbnails?.maxres?.url ?? item.snippet.thumbnails?.high?.url ?? `https://img.youtube.com/vi/${item.id}/hqdefault.jpg`,
+        viewCount: item.statistics?.viewCount ?? '0',
+        likeCount: item.statistics?.likeCount ?? '0',
+        commentCount: item.statistics?.commentCount ?? '0',
+        duration: parseDuration(durationRaw),
+        publishedAt: item.snippet.publishedAt,
+        channelTitle: item.snippet.channelTitle,
+        isShort,
+      };
+    });
   } catch (error) {
-    console.error('Error fetching popular videos:', error);
+    console.error('Error fetching YouTube details:', error);
     return [];
   }
 }
 
-export function formatCount(count: string): string {
-  const num = parseInt(count, 10);
-  if (isNaN(num)) return '0';
-  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
-  if (num >= 1_000) return `${(num / 1_000).toFixed(1)}K`;
-  return num.toLocaleString();
+export async function getPopularContent(limit = 12): Promise<{ videos: YoutubeVideo[], shorts: YoutubeVideo[] }> {
+  if (!API_KEY) return { videos: [], shorts: [] };
+  const url = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=24&order=viewCount&type=video&key=${API_KEY}`;
+
+  try {
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) return { videos: [], shorts: [] };
+    const data = await res.json();
+    const ids = data.items?.map((i: any) => i.id.videoId).filter(Boolean) || [];
+    const all = await getVideoDetails(ids);
+    return {
+      videos: all.filter(v => !v.isShort).slice(0, limit),
+      shorts: all.filter(v => v.isShort).slice(0, limit),
+    };
+  } catch (error) {
+    return { videos: [], shorts: [] };
+  }
 }
 
-function parseDuration(duration: string): string {
-  const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  if (!match) return '0:00';
-  const h = parseInt(match[1] ?? '0');
-  const m = parseInt(match[2] ?? '0');
-  const s = parseInt(match[3] ?? '0');
-  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-  return `${m}:${String(s).padStart(2, '0')}`;
+export async function getLiveStreams(limit = 6): Promise<YoutubeVideo[]> {
+  if (!API_KEY) return [];
+  const url = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=${limit}&order=date&type=video&eventType=completed&key=${API_KEY}`;
+  try {
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const ids = data.items?.map((i: any) => i.id.videoId).filter(Boolean) || [];
+    const details = await getVideoDetails(ids);
+    return details.map(v => ({ ...v, category: 'Stream' }));
+  } catch (error) { return []; }
 }
 
+export async function getChannelStats(): Promise<ChannelStats | null> {
+  if (!API_KEY) return null;
+  const url = `${BASE_URL}/channels?part=statistics&id=${CHANNEL_ID}&key=${API_KEY}`;
+  try {
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    const data = await res.json();
+    const s = data.items?.[0]?.statistics;
+    if (!s) return null;
+    return { subscriberCount: s.subscriberCount, viewCount: s.viewCount, videoCount: s.videoCount };
+  } catch (error) { return null; }
+}
+
+function parseDuration(d: string): string {
+  const m = d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!m) return '0:00';
+  const h = m[1], min = m[2] || '0', s = m[3] || '0';
+  if (h) return `${h}:${min.padStart(2, '0')}:${s.padStart(2, '0')}`;
+  return `${min}:${s.padStart(2, '0')}`;
+}
+
+export function formatCount(c: string): string {
+  const n = parseInt(c, 10);
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return c;
+}

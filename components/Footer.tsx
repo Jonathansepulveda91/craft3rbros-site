@@ -1,6 +1,11 @@
 'use client';
 
-export default function Footer() {
+interface FooterProps {
+  tagline?: string;
+}
+
+export default function Footer({ tagline }: FooterProps) {
+  const displayTagline = tagline || 'Epic gaming content, epic adventures.';
   const year = new Date().getFullYear();
 
   return (
@@ -19,9 +24,10 @@ export default function Footer() {
               <span style={{ fontSize: '22px', fontWeight: 900, color: '#FF6B1A', letterSpacing: '-0.5px' }}>Br0s</span>
             </div>
             <p style={{ color: '#555570', fontSize: '14px', maxWidth: '220px', lineHeight: 1.6 }}>
-              Epic gaming content, epic adventures.
+              {displayTagline}
             </p>
           </div>
+
 
           {/* Links */}
           <div style={{ display: 'flex', gap: '60px', flexWrap: 'wrap' }}>

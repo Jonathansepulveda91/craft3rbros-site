@@ -5,9 +5,13 @@ import { formatCount } from '@/lib/youtube';
 
 interface HeroProps {
   video: MergedVideo | null;
+  headline?: string;
+  subtext?: string;
 }
 
-export default function Hero({ video }: HeroProps) {
+export default function Hero({ video, headline, subtext }: HeroProps) {
+  const displayHeadline = headline || 'Craft3rBr0s';
+  const displaySubtext = subtext || 'Epic gaming adventures & content. Subscribe and join the community.';
   const youtubeChannelUrl = 'https://www.youtube.com/@Craft3rBr0s';
 
   return (
@@ -45,11 +49,11 @@ export default function Hero({ video }: HeroProps) {
           </div>
 
           <h1 style={{ fontSize: 'clamp(44px, 12vw, 96px)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-2px', marginBottom: '16px' }}>
-            <span style={{ color: '#1A6BFF' }}>Craft3r</span>
-            <span style={{ color: '#FF6B1A' }}>Br0s</span>
+            <span style={{ color: '#1A6BFF' }}>{displayHeadline.substring(0, 8)}</span>
+            <span style={{ color: '#FF6B1A' }}>{displayHeadline.substring(8)}</span>
           </h1>
           <p style={{ fontSize: 'clamp(15px, 2.5vw, 19px)', color: '#8888aa', maxWidth: '480px', margin: '0 auto', lineHeight: 1.5, fontWeight: 400 }}>
-            Epic gaming adventures & content. Subscribe and join the community.
+            {displaySubtext}
           </p>
         </div>
 

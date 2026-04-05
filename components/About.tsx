@@ -4,6 +4,9 @@ import { type ChannelStats, formatCount } from '@/lib/youtube';
 
 interface AboutProps {
   channelStats: ChannelStats | null;
+  title?: string;
+  bio1?: string;
+  bio2?: string;
 }
 
 const FALLBACK_STATS = [
@@ -12,7 +15,11 @@ const FALLBACK_STATS = [
   { label: 'Videos', value: '—', icon: '🎬' },
 ];
 
-export default function About({ channelStats }: AboutProps) {
+export default function About({ channelStats, title, bio1, bio2 }: AboutProps) {
+  const displayTitle = title || 'About Craft3rBr0s';
+  const displayBio1 = bio1 || 'Welcome to Craft3rBr0s — your ultimate destination for epic gaming content! We create entertaining gameplay, challenges, tutorials, and gaming experiences that keep you coming back for more.';
+  const displayBio2 = bio2 || 'Join our growing community of passionate gamers. New videos drop every week — subscribe so you never miss a moment.';
+
   const stats = channelStats
     ? [
         { label: 'Subscribers', value: formatCount(channelStats.subscriberCount), icon: '👥' },
@@ -25,7 +32,7 @@ export default function About({ channelStats }: AboutProps) {
     <section
       id="about"
       style={{
-        padding: '100px 24px',
+        padding: '100px 20px',
         background: 'linear-gradient(180deg, #080810 0%, #0d0d1a 100%)',
       }}
     >
@@ -38,16 +45,15 @@ export default function About({ channelStats }: AboutProps) {
               About the Channel
             </p>
             <h2 style={{ fontSize: 'clamp(28px, 4vw, 46px)', fontWeight: 800, color: '#fff', letterSpacing: '-1.5px', lineHeight: 1.1, marginBottom: '24px' }}>
-              About<br />
-              <span style={{ color: '#1A6BFF' }}>Craft3r</span>
-              <span style={{ color: '#FF6B1A' }}>Br0s</span>
+              {displayTitle.split(' ').slice(0, -1).join(' ')}<br />
+              <span style={{ color: '#1A6BFF' }}>{displayTitle.split(' ').slice(-1)}</span>
             </h2>
 
             <p style={{ color: '#8888aa', fontSize: '16px', lineHeight: 1.8, marginBottom: '20px' }}>
-              Welcome to Craft3rBr0s — your ultimate destination for epic gaming content! We create entertaining gameplay, challenges, tutorials, and gaming experiences that keep you coming back for more.
+              {displayBio1}
             </p>
             <p style={{ color: '#8888aa', fontSize: '16px', lineHeight: 1.8, marginBottom: '32px' }}>
-              Join our growing community of passionate gamers. New videos drop every week — subscribe so you never miss a moment.
+              {displayBio2}
             </p>
 
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -81,7 +87,7 @@ export default function About({ channelStats }: AboutProps) {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#fff'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.25)'; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8888aa'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; }}
               >
-                ✉ Nathan@craft3rbr0s.com
+                ✉ email us
               </a>
             </div>
           </div>
@@ -92,17 +98,17 @@ export default function About({ channelStats }: AboutProps) {
               <div
                 key={stat.label}
                 style={{
-                  background: '#111122', border: '1px solid rgba(255,255,255,0.07)',
+                  background: '#111122', border: '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '16px', padding: '24px 28px',
                   display: 'flex', alignItems: 'center', gap: '20px',
-                  transition: 'all 0.2s',
+                  transition: 'all 0.25s ease',
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(26,107,255,0.25)';
-                  (e.currentTarget as HTMLElement).style.background = '#131325';
+                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(26,107,255,0.2)';
+                  (e.currentTarget as HTMLElement).style.background = '#15152a';
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)';
+                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.05)';
                   (e.currentTarget as HTMLElement).style.background = '#111122';
                 }}
               >
@@ -122,20 +128,8 @@ export default function About({ channelStats }: AboutProps) {
                     {stat.label}
                   </div>
                 </div>
-                {channelStats && (
-                  <div style={{ marginLeft: 'auto', color: '#2a4a2a', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-                    <span style={{ color: '#22c55e', fontSize: '11px', fontWeight: 600 }}>LIVE</span>
-                  </div>
-                )}
               </div>
             ))}
-
-            {channelStats && (
-              <p style={{ color: '#555570', fontSize: '12px', textAlign: 'center', marginTop: '4px' }}>
-                Stats pulled live from YouTube API · updates hourly
-              </p>
-            )}
           </div>
         </div>
       </div>

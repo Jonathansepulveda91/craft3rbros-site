@@ -1,8 +1,8 @@
 import { defineField, defineType } from 'sanity';
 
-export const videoType = defineType({
-  name: 'featuredVideo',
-  title: 'Featured Video',
+export default defineType({
+  name: 'video',
+  title: 'Video',
   type: 'document',
   fields: [
     defineField({
