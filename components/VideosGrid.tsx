@@ -25,9 +25,9 @@ export default function VideosGrid({ videos, shorts, streams }: VideosGridProps)
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: isShorts 
-          ? 'repeat(auto-fill, minmax(min(100%, 200px), 1fr))' 
-          : 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', 
-        gap: '24px' 
+          ? 'repeat(auto-fill, minmax(130px, 1fr))' 
+          : 'repeat(auto-fill, minmax(160px, 1fr))', 
+        gap: '16px' 
       }}>
         {items.map((video) => (
           <a 
@@ -48,7 +48,7 @@ export default function VideosGrid({ videos, shorts, streams }: VideosGridProps)
               flexDirection: 'column'
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = 'translateY(-10px)';
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(-6px)';
               (e.currentTarget as HTMLElement).style.borderColor = isShorts ? 'rgba(255,107,26,0.3)' : title === 'Live Streams' ? 'rgba(255,62,62,0.3)' : 'rgba(26,107,255,0.3)';
               (e.currentTarget as HTMLElement).style.boxShadow = isShorts ? '0 10px 30px rgba(255,107,26,0.1)' : title === 'Live Streams' ? '0 10px 30px rgba(255,62,62,0.1)' : '0 10px 30px rgba(26,107,255,0.1)';
             }}
@@ -66,26 +66,26 @@ export default function VideosGrid({ videos, shorts, streams }: VideosGridProps)
                 />
                 {!isShorts && (
                   <div style={{
-                    position: 'absolute', bottom: '10px', right: '10px',
-                    background: 'rgba(0,0,0,0.8)', color: '#fff',
-                    padding: '4px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700
+                    position: 'absolute', bottom: '8px', right: '8px',
+                    background: 'rgba(0,0,0,0.85)', color: '#fff',
+                    padding: '3px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 700
                   }}>
                     {video.duration}
                   </div>
                 )}
                 <div style={{
-                  position: 'absolute', top: '10px', left: '10px',
+                  position: 'absolute', top: '8px', left: '8px',
                   background: isShorts ? 'rgba(255,107,26,0.9)' : title === 'Live Streams' ? 'rgba(255,62,62,0.9)' : 'rgba(26,107,255,0.9)',
-                  color: '#fff', padding: '4px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700
+                  color: '#fff', padding: '3px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 700
                 }}>
                   {isShorts ? 'Short' : title === 'Live Streams' ? 'Stream' : video.category || 'Video'}
                 </div>
               </div>
-              <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <h3 style={{ color: '#fff', fontSize: '15px', fontWeight: 700, marginBottom: '12px', lineHeight: 1.4 }}>
+              <div style={{ padding: '12px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <h3 style={{ color: '#fff', fontSize: '13px', fontWeight: 700, marginBottom: '8px', lineHeight: 1.4 }}>
                   {video.title}
                 </h3>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#8888aa', fontSize: '13px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#8888aa', fontSize: '11px' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                     👁 {formatCount(video.viewCount)}
                   </span>

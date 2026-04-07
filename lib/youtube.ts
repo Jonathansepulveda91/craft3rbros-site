@@ -58,14 +58,25 @@ export async function getVideoDetails(ids: string[]): Promise<YoutubeVideo[]> {
 
 export async function getPopularContent(limit = 12): Promise<{ videos: YoutubeVideo[], shorts: YoutubeVideo[] }> {
   if (!API_KEY) return { videos: [], shorts: [] };
-  const url = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=50&order=viewCount&type=video&key=${API_KEY}`;
+  const popUrl = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=50&order=viewCount&type=video&key=${API_KEY}`;
+  const recUrl = `${BASE_URL}/search?part=id&channelId=${CHANNEL_ID}&maxResults=50&order=date&type=video&key=${API_KEY}`;
 
   try {
-    const res = await fetch(url, { next: { revalidate: 3600 } });
-    if (!res.ok) return { videos: [], shorts: [] };
-    const data = await res.json();
-    const ids = data.items?.map((i: any) => i.id.videoId).filter(Boolean) || [];
+    const [popRes, recRes] = await Promise.all([
+      fetch(popUrl, { next: { revalidate: 3600 } }),
+      fetch(recUrl, { next: { revalidate: 3600 } })
+    ]);
+    
+    const popData = popRes.ok ? await popRes.json() : { items: [] };
+    const recData = recRes.ok ? await recRes.json() : { items: [] };
+    
+    const ids = [...(popData.items || []), ...(recData.items || [])]
+      .map((i: any) => i.id?.videoId)
+      .filter((id, index, arr) => id && arr.indexOf(id) === index);
+
     const all = await getVideoDetails(ids);
+    all.sort((a, b) => parseInt(b.viewCount) - parseInt(a.viewCount));
+
     return {
       videos: all.filter(v => !v.isShort).slice(0, limit),
       shorts: all.filter(v => v.isShort).slice(0, limit),
