@@ -25,15 +25,26 @@ export interface ChannelStats {
 
 export async function getVideoDetails(ids: string[]): Promise<YoutubeVideo[]> {
   if (!API_KEY || ids.length === 0) return [];
-  const url = `${BASE_URL}/videos?part=snippet,statistics,contentDetails&id=${ids.join(',')}&key=${API_KEY}`;
+  
+  const chunks: string[][] = [];
+  for (let i = 0; i < ids.length; i += 50) {
+    chunks.push(ids.slice(i, i + 50));
+  }
 
   try {
-    const res = await fetch(url, { next: { revalidate: 3600 } });
-    if (!res.ok) return [];
-    const data = await res.json();
-    if (!data.items) return [];
+    const results = await Promise.all(
+      chunks.map(async (chunk) => {
+        const url = `${BASE_URL}/videos?part=snippet,statistics,contentDetails&id=${chunk.join(',')}&key=${API_KEY}`;
+        const res = await fetch(url, { next: { revalidate: 3600 } });
+        if (!res.ok) return [];
+        const data = await res.json();
+        return data.items || [];
+      })
+    );
+    
+    const allItems = results.flat();
 
-    return data.items.map((item: any): YoutubeVideo => {
+    return allItems.map((item: any): YoutubeVideo => {
       const durationRaw = item.contentDetails?.duration ?? 'PT0S';
       const isShort = !durationRaw.includes('M') && !durationRaw.includes('H');
       return {
