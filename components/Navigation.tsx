@@ -28,6 +28,16 @@ export default function Navigation() {
         borderBottom: `1px solid ${scrolled || mobileOpen ? 'rgba(255,255,255,0.08)' : 'transparent'}`,
       }}
     >
+      <style>{`
+        .desktop-nav-links { display: none !important; }
+        .desktop-nav-youtube { display: none !important; }
+        .mobile-hamburger { display: flex !important; }
+        @media (min-width: 1024px) {
+          .desktop-nav-links { display: flex !important; }
+          .desktop-nav-youtube { display: flex !important; }
+          .mobile-hamburger { display: none !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
 
@@ -38,7 +48,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="desktop-nav-links" style={{ alignItems: 'center', gap: '32px' }}>
             {(['#home', '#videos', '#shop', '#about'] as const).map((href, i) => {
               const label = ['Home', 'Videos', 'Shop', 'About'][i];
               return (
@@ -61,12 +71,13 @@ export default function Navigation() {
               href="https://www.youtube.com/@Craft3rBr0s"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2"
+              className="desktop-nav-youtube"
               style={{
                 color: '#8888aa', textDecoration: 'none', fontSize: '14px', fontWeight: 500,
                 padding: '8px 14px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)',
                 transition: 'all 0.2s',
+                alignItems: 'center', gap: '8px'
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.color = '#ff0000';
@@ -104,11 +115,11 @@ export default function Navigation() {
               Shop
             </a>
 
-            {/* Mobile hamburger - show only on smaller screens */}
+            {/* Mobile hamburger - strictly hidden on desktop */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden"
-              style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', padding: '8px', zIndex: 101, display: 'flex', alignItems: 'center' }}
+              className="mobile-hamburger"
+              style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', padding: '8px', zIndex: 101, alignItems: 'center' }}
               aria-label="Toggle menu"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
